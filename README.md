@@ -36,49 +36,49 @@ The implemented network contains 1,039,968 trainable parameters. Convolutions an
 
 For FLOPs I count Conv and Linear MACs only, with `1 MAC = 2 FLOPs`:
 
-\[
+$$
 F(S,B) = B(17712S^2 + 313344).
-\]
+$$
 
 For the analytical memory estimate I follow the convention used for this homework: model weights plus the sum of all activation tensors:
 
-\[
+$$
 M(S,B) = 4[1039968 + B(26S^2 + 868)]
-\]
+$$
 
 bytes.
 
 For memory traffic I assume that Conv/Linear read their input and weights once and write their output once, ReLU reads and writes the activation, and pooling reads its input and writes its output. Cache reuse is not modeled:
 
-\[
+$$
 Q(S,B) = 4[1039968 + B(91S^2 + 2148)]
-\]
+$$
 
 bytes.
 
 Latency is modeled with a small roofline-like expression:
 
-\[
+$$
 T(S,B) = t_0 + \max\left(\frac{F(S,B)}{P}, \frac{Q(S,B)}{BW}\right).
-\]
+$$
 
 The fitted parameters are:
 
-- \(t_0 = 0.402\) ms;
-- \(P = 3.193 \times 10^{12}\) FLOP/s;
-- \(BW = 7.707 \times 10^{10}\) byte/s.
+- $t_0 = 0.402$ ms;
+- $P = 3.193 \times 10^{12}$ FLOP/s;
+- $BW = 7.707 \times 10^{10}$ byte/s.
 
 Energy is modeled as
 
-\[
+$$
 E(S,B) = e_0 + e_F F_{\mathrm{GFLOP}} + e_Q Q_{\mathrm{GB}}.
-\]
+$$
 
 The fitted parameters are:
 
-- \(e_0 = 0.01978\) J;
-- \(e_F = 1.24 \times 10^{-8}\) J/GFLOP;
-- \(e_Q = 1.0711\) J/GB.
+- $e_0 = 0.01978$ J;
+- $e_F = 1.24 \times 10^{-8}$ J/GFLOP;
+- $e_Q = 1.0711$ J/GB.
 
 The energy parameters are fitted in log-space because the measured values span several orders of magnitude.
 
